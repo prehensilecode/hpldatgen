@@ -2,6 +2,7 @@
 import sys
 import os
 import math
+import argparse
 
 debug_p = False
 
@@ -44,6 +45,7 @@ def getGrid(nodes, ppn):
 
 def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
     global debug_p
+
     baseN = getBaseN(nodes, mpn)
     realN = getNFromNb(baseN, nb)
     pQ = getGrid(nodes, cpn)
@@ -93,6 +95,17 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
 
     print(contents)
 
+
 if __name__ == '__main__':
-    calchpl()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--debug', action='store_true', help='Debugging output')
+    parser.add_argument('-n', '--nodes', type=int, default=1, help='Number of nodes')
+    parser.add_argument('-c', '--cores-per-node', type=int, default=48, help='Number of cores per node')
+    parser.add_argument('-m', '--memory-per-node', type=int, default=192000, help='Memory per node in MB')
+    parser.add_argument('-b', '--block-size', type=int, default=192, help='Block size (NB)')
+    args = parser.parse_args()
+
+    debug_p = args.debug
+
+    calchpl(args.nodes, args.cores_per_node, args.memory_per_node, args.block_size)
 
