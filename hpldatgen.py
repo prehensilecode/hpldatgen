@@ -3,6 +3,8 @@ import sys
 import os
 import math
 
+debug_p = False
+
 def getBaseN(nodes, mpn):
     return int(math.sqrt((((mpn * 0.80) * nodes) * 1024 * 1024) / 8))
 
@@ -17,7 +19,6 @@ def getNFromNb(baseN, nb):
 def getGrid(nodes, ppn):
     cores = nodes * ppn
     sqrt_cores = int(math.sqrt(cores))
-    print("sqrt_cores = {}".format(sqrt_cores))
     factors = []
     for num in range(2, sqrt_cores+1):
         if (cores % num) == 0:
@@ -25,8 +26,6 @@ def getGrid(nodes, ppn):
 
     if len(factors) == 0:
         factors.append(1)
-
-    print("factors = {}".format(factors))
 
     diff = 0
     keep = 0
@@ -44,13 +43,15 @@ def getGrid(nodes, ppn):
 
 
 def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
+    global debug_p
     baseN = getBaseN(nodes, mpn)
     realN = getNFromNb(baseN, nb)
     pQ = getGrid(nodes, cpn)
 
-    print('baseN = {}'.format(baseN))
-    print('realN = {}'.format(realN))
-    print('pQ = {}'.format(pQ))
+    if debug_p:
+        print('baseN = {}'.format(baseN))
+        print('realN = {}'.format(realN))
+        print('pQ = {}'.format(pQ))
 
     contents = ''
     contents += 'HPLinpack benchmark input file\n'
