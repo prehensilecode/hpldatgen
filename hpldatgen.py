@@ -43,7 +43,7 @@ def getGrid(nodes, ppn):
     return (keep, int(cores/keep))
 
 
-def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
+def calchpl(nodes=1, cpn=48, mpn=192000, nb=192, outfile='HPL.dat'):
     global debug_p
 
     baseN = getBaseN(nodes, mpn)
@@ -51,9 +51,13 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
     pQ = getGrid(nodes, cpn)
 
     if debug_p:
+        print('DEBUG')
         print('baseN = {}'.format(baseN))
         print('realN = {}'.format(realN))
         print('pQ = {}'.format(pQ))
+        print('nb = {}'.format(nb))
+        print('outfile = {}'.format(outfile))
+        print('')
 
     contents = ''
     contents += 'HPLinpack benchmark input file\n'
@@ -93,19 +97,22 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=192):
     contents += '0                               number of additional blocking sizes for PTRANS\n'
     contents += '40 9 8 13 13 20 16 32 64        values of NB\n'
 
-    print(contents)
+    with open(outfile, 'w') as f:
+        f.write(contents)
+
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--debug', action='store_true', help='Debugging output')
-    parser.add_argument('-n', '--nodes', type=int, default=1, help='Number of nodes')
-    parser.add_argument('-c', '--cores-per-node', type=int, default=48, help='Number of cores per node')
-    parser.add_argument('-m', '--memory-per-node', type=int, default=192000, help='Memory per node in MB')
-    parser.add_argument('-b', '--block-size', type=int, default=192, help='Block size (NB)')
+    parser.add_argument('-n', '--nodes', type=int, default=1, help='Number of nodes; default 1')
+    parser.add_argument('-c', '--cores-per-node', type=int, default=48, help='Number of cores per node; default 48')
+    parser.add_argument('-m', '--memory-per-node', type=int, default=192000, help='Memory per node in MB; default 192000')
+    parser.add_argument('-b', '--block-size', type=int, default=192, help='Block size (NB); default 192')
+    parser.add_argument('-o', '--output-file', default='HPL.dat', help='Output file name; default "HPL.dat"')
     args = parser.parse_args()
 
     debug_p = args.debug
 
-    calchpl(args.nodes, args.cores_per_node, args.memory_per_node, args.block_size)
+    calchpl(args.nodes, args.cores_per_node, args.memory_per_node, args.block_size, args.output_file)
 
