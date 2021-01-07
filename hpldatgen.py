@@ -118,7 +118,7 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--nodes', type=int, default=1, help='Number of nodes; default 1')
     parser.add_argument('-c', '--cores-per-node', type=int, default=48, help='Number of cores per node; default 48')
     parser.add_argument('-m', '--memory-per-node', type=int, default=192000, help='Memory per node in MB; default 192000')
-    parser.add_argument('-b', '--block-size', type=int, default=192, help='Block size (NB); default 192')
+    parser.add_argument('-b', '--block-size', type=int, default=384, help='Block size (NB); default 384')
     parser.add_argument('-o', '--output-file', default='HPL.dat', help='Output file name; default "HPL.dat"')
     args = parser.parse_args()
 
