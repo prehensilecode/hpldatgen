@@ -61,6 +61,7 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=384, outfile='HPL.dat'):
         print('outfile = {}'.format(outfile))
         print('')
 
+    # from experimenting, best performance when Q is set to cores-per-node
     contents = ''
     contents += 'HPLinpack benchmark input file\n'
     contents += 'Innovative Computing Laboratory, University of Tennessee\n'
@@ -72,8 +73,8 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=384, outfile='HPL.dat'):
     contents += str(nb) + '           NBs\n'
     contents += '0            PMAP process mapping (0=Row-,1=Column-major)\n'
     contents += '1            # of process grids (P x Q)\n'
-    contents += str(pQ[0]) + '            Ps\n'
-    contents += str(pQ[1]) + '            Qs\n'
+    contents += str(pQ[1]) + '            Ps\n'
+    contents += str(pQ[0]) + '            Qs\n'
     contents += '16.0         threshold\n'
     contents += '1            # of panel fact\n'
     contents += '2            PFACTs (0=left, 1=Crout, 2=Right)\n'
