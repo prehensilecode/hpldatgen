@@ -3,11 +3,13 @@ import sys
 import os
 import math
 import argparse
+from pathlib import Path
 
 debug_p = False
 
 def getBaseN(nodes, mpn):
-    return int(math.sqrt((((mpn * 0.80) * nodes) * 1024 * 1024) / 8))
+    # from experimenting, 1300000 (i.e. 0.67) will not result in OOM
+    return int(math.sqrt((((mpn * 0.67) * nodes) * 1024 * 1024) / 8))
 
 
 def getNFromNb(baseN, nb):
@@ -43,7 +45,7 @@ def getGrid(nodes, ppn):
     return (keep, int(cores/keep))
 
 
-def calchpl(nodes=1, cpn=48, mpn=192000, nb=192, outfile='HPL.dat'):
+def calchpl(nodes=1, cpn=48, mpn=192000, nb=384, outfile='HPL.dat'):
     global debug_p
 
     baseN = getBaseN(nodes, mpn)
@@ -97,9 +99,16 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=192, outfile='HPL.dat'):
     contents += '0                               number of additional blocking sizes for PTRANS\n'
     contents += '40 9 8 13 13 20 16 32 64        values of NB\n'
 
+    cnt = 2
+    while Path(outfile).is_file():
+        lastoutfile = outfile
+        outfile = 'HPL.dat.{}'.format(cnt)
+        cnt += 1
+
+    print('{} file already exists. Writing to {} instead.'.format(lastoutfile, outfile))
+
     with open(outfile, 'w') as f:
         f.write(contents)
-
 
 
 if __name__ == '__main__':
