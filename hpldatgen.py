@@ -105,7 +105,8 @@ def calchpl(nodes=1, cpn=48, mpn=192000, nb=384, outfile='HPL.dat'):
         outfile = 'HPL.dat.{}'.format(cnt)
         cnt += 1
 
-    print('{} file already exists. Writing to {} instead.'.format(lastoutfile, outfile))
+    if cnt > 2:
+        print('{} file already exists. Writing to {} instead.'.format(lastoutfile, outfile))
 
     with open(outfile, 'w') as f:
         f.write(contents)
